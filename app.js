@@ -10,6 +10,7 @@ const userRoutes = require('./api/routes/user');
 
 mongoose.connect(
   "mongodb+srv://meeshika2:meeshika@cluster0.guftx.mongodb.net/db36?retryWrites=true&w=majority",
+ // "mongodb+srv://meeshika2:meeshika@cluster0.guftx.mongodb.net/db36?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
