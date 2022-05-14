@@ -12,7 +12,8 @@ const userSchema = mongoose.Schema({
     password: { type: String,
       required:true
     },
-    phoneNo:{ type:Number,required:true},
+    licenseNo:{type:String,required:true},
+    phoneNo:{ type:String,required:true},
     address:{type:String,required:true},
     rating:{type:Number,required:false}
 });
