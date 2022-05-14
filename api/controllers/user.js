@@ -82,6 +82,8 @@ exports.user_login = (req, res, next) => {
       }
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
         if (err) {
+          console.log(req.body.email);
+
           return res.status(401).json({
             message: "Auth failed"
           });
@@ -97,11 +99,14 @@ exports.user_login = (req, res, next) => {
               expiresIn: "1h"
             }
           );
+          console.log(req.body.email);
           return res.status(200).json({
             message: "Auth successful",
             token: token
           });
         }
+        console.log(req.body.email);
+
         res.status(401).json({
           message: "Auth failed"
         });
