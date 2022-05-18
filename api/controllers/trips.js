@@ -116,16 +116,21 @@ exports.trips_create_trip = (req, res, next) => {
              c = 2;
             // break;
       }
-      else if (td == date && x > nst){ c==2;}
+      else if (td == date && x > nst){ c=3;}
       if(c==1)
         {return res.status(409).json({
           message: "you have already published a ride in this duration!"}
         );}
       else if( c == 2){
           {return res.status(502).json({
-            message: "Invalid Trip!"}
+            message: "Check your trip's end time and start time!"}
           );}
         }
+      else if( c == 3){
+        {return res.status(501).json({
+          message: "Can not book ride in past!"}
+        );}
+      }
       else{
           const trip = new Trip2({
             _id: new mongoose.Types.ObjectId(),
