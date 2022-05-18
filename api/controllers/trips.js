@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Trip2 = require("../models/trips2");
+const Trip2 = require("../models/trips3");
 const user = require("../models/user");
 
 exports.trips_get_all = (req, res, next) => {
