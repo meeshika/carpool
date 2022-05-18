@@ -102,7 +102,7 @@ exports.trips_create_trip = (req, res, next) => {
       // console.log("this is already in data base");
       // console.log(trip[0]);
       // console.log("hey there");
-      let c = 0;
+      var c = 0;
       if (trip.length >= 1){
         for ( t in trip){
           if((nst < net)&&(!(t.startTime >= net || nst >= t.endTime))){
