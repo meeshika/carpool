@@ -79,8 +79,13 @@ exports.trip_get_trip = (req, res, next) => {
 
 exports.trips_create_trip = (req, res, next) => {
   console.log({"body":req.body});
-  const nst = parseInt(req.body.startTime);
-  const net = parseInt(req.body.endTime);
+  const nsth = parseInt(req.body.startTimeh);
+  const nstm = parseInt(req.body.startTimem);
+  const neth = parseInt(req.body.endTimeh);
+  
+  const netm = parseInt(req.body.endTimem);
+  const nst = nsth* 100 + nstm;
+  const net = neth*100 + netm;
   const td = parseInt(req.body.tripDate);
   const cs = parseInt(req.body.carSeats);
   let a = -1;
