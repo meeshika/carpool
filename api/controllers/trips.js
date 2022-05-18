@@ -105,7 +105,7 @@ exports.trips_create_trip = (req, res, next) => {
       let c = 0;
       if (trip.length >= 1){
         for ( t in trip){
-          if((nst < net)&&(trip[0].startTime > net || nst > trip[0].endTime)){
+          if((nst < net)&&(!(trip[0].startTime >= net || nst >= trip[0].endTime|| net > trip[0].startTime))){
              c = 1;
              break;
           }
