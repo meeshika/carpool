@@ -122,6 +122,7 @@ exports.trips_create_trip = (req, res, next) => {
             // break;
       }
       else if ((c == 0)&& td == date && x > nst){ c=3;}
+      console.log(c);
        if( c == 3){
         {return res.status(501).json({
           message: "Can not book ride in past!"}
