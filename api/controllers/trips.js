@@ -157,7 +157,7 @@ exports.trips_create_trip = (req, res, next) => {
               message: "published trip successfully",
               createdProduct: {
                 name: result.name,
-                price: result.price,
+              //  price: result.price,
                 _id: result._id,
                 request: {
                   type: "GET",
