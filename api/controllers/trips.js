@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const Trip = require("../models/trips");
+const Trip2 = require("../models/trips2");
+const user = require("../models/user");
 
 exports.trips_get_all = (req, res, next) => {
   Product.find()
@@ -38,50 +39,34 @@ exports.trips_get_all = (req, res, next) => {
     });
 };
 
-exports.trips_create_trip = (req, res, next) => {
-  const trip = new Trip({
-    _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
-    price: req.body.price,
-    sourceLocation:{
-      coordinates:[
-        req.body.slatitude,
-        req.body.slongitude
-      ]
-    },
-    destinationLocation:{
-      coordinates:[
-        req.body.dlatitude,
-        req.body.dlongitude
-      ]
-    }
-    // sourceLat:req.body.sourceLat,
-    // sourceLog:req.body.source.Log,
-    // destinationLat:req.body.destinationLat,
-    // destinationLog:req.body.destinationLog
-  });
-  trip
-    .save()
-    .then(result => {
-      console.log(result);
-      res.status(201).json({
-        message: "Created product successfully",
-        createdProduct: {
-          name: result.name,
-          price: result.price,
-          _id: result._id,
-          // sourceLat:req.body.sourceLat,
-          // sourceLog:req.body.source.Log,
-          // destinationLat:req.body.destinationLat,
-          // destinationLog:req.body.destinationLog,
-          //source:result.source,
-          //destination:result.destination,
-          request: {
-            type: "GET",
-            url: "http://localhost:3000/products/" + result._id
-          }
-        }
-      });
+exports.trip_get_trip = (req, res, next) => {
+  Product.find("slat slong dlat dlong")
+    .select("name price _id source destination")
+    .exec()
+    .then(docs => {
+      const response = {
+        count: docs.length,
+        trips: docs.map(doc => {
+          return {
+            name: doc.name,
+            price: doc.price,
+            _id: doc._id,
+            source:doc.source,
+            destination:doc.destination,
+            request: {
+              type: "GET",
+              url: "http://localhost:3000/products/" + doc._id
+            }
+          };
+        })
+      };
+      //   if (docs.length >= 0) {
+      res.status(200).json(response);
+      //   } else {
+      //       res.status(404).json({
+      //           message: 'No entries found'
+      //       });
+      //   }
     })
     .catch(err => {
       console.log(err);
@@ -90,6 +75,119 @@ exports.trips_create_trip = (req, res, next) => {
       });
     });
 };
+
+
+exports.trips_create_trip = (req, res, next) => {
+  console.log({"body":req.body});
+  const nst = parseInt(req.body.startTime);
+  const net = parseInt(req.body.endTime);
+  const td = parseInt(req.body.tripDate);
+  const cs = parseInt(req.body.carSeats);
+  let a = -1;
+  user.find({email : req.body.email}).exec().then(users => {
+    if(users.length == 0){
+      a = 0;
+      return res.status(503).json({
+        message: "Not a valid user!"})
+    }
+  else{
+  Trip2.find({ email: req.body.email , tripDate: td })
+    .exec()
+    .then(trip => {
+      // console.log("this is already in data base");
+      // console.log(trip[0]);
+      // console.log("hey there");
+      let c = 0;
+      if (trip.length >= 1){
+        for ( t in trip){
+          if((nst <= trip[0].endTime || nst >=trip[0].startTime) || (net <= trip[0].endTime || net >=trip.startTime)){
+             c = 1;
+             break;
+          }
+        }
+      }
+      var d = new Date(); // for now
+      var h = d.getHours(); 
+      var m = d.getMinutes();
+      var x = h*100+m;
+      var date = (d.getFullYear())*10000+(d.getMonth()+1)*100+d.getDate();
+      console.log(date);
+      if( nst >= net){
+             c = 2;
+            // break;
+      }
+      else if (td == date && x > nst){ c==2;}
+      if(c==1)
+        {return res.status(409).json({
+          message: "you have already published a ride in this duration!"}
+        );}
+      else if( c == 2){
+          {return res.status(502).json({
+            message: "Invalid Trip!"}
+          );}
+        }
+      else{
+          const trip = new Trip2({
+            _id: new mongoose.Types.ObjectId(),
+            email: req.body.email,
+            carRegistrationNo: req.body.carRegistrationNo,
+           // price: req.body.price,
+           carSeats:cs,
+            sourceLocation:{
+              coordinates:{
+                slatitude:parseFloat(req.body.sourceLocation.coordinates.slatitude),
+                slongitude:parseFloat(req.body.sourceLocation.coordinates.slongitude)
+              }
+            },
+            destinationLocation:{
+              coordinates:{
+                dlatitude:parseFloat(req.body.destinationLocation.coordinates.dlatitude),
+                dlongitude:parseFloat(req.body.destinationLocation.coordinates.dlongitude)
+              }
+            },
+            startTime:nst,
+            endTime:net,
+            tripDate:td
+          });
+          trip
+          .save()
+          .then(result => {
+            console.log(result);
+            res.status(201).json({
+              message: "published trip successfully",
+              createdProduct: {
+                name: result.name,
+                price: result.price,
+                _id: result._id,
+                request: {
+                  type: "GET",
+                  url: "http://localhost:3000/products/" + result._id
+                }
+              }
+            });
+          })
+          .catch(err => {
+            console.log(err);
+            res.status(500).json({
+              error: err
+            });
+          });
+        }
+      });
+    }
+  })
+    }
+
+    //     }).catch(err => {
+    //         console.log(err);
+    //         res.status(500).json({
+    //           error: err
+    //         });
+    //       });
+    //     };
+    //   });
+    // };
+
 
 exports.trips_get_trips = (req, res, next) => {
   // const id = req.params.tripId;
