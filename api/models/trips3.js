@@ -5,28 +5,28 @@ const trip2Schema = mongoose.Schema({
     email: { type: String, required: true },
     carRegistrationNo:{type: String,required:true},
     carSeats:{type:Number,required:true},
-    sourceLocation:{
-        type:{
-            coordinates:{
-                type:{
+   // sourceLocation:{
+    //    type:{
+     //       coordinates:{
+    //            type:{
                 slatitude:{ type:Number, required : true},
-                slongitude:{ type:Number, required : true}
-                }
-            }
-        },
+                slongitude:{ type:Number, required : true},
+    //            }
+    //        }
+     //   },
        
-    },
-    destinationLocation:{
-        type:{
-            coordinates:{
-                type:{
+    //},
+    //destinationLocation:{
+    //    type:{
+    //        coordinates:{
+    //            type:{
                 dlatitude:{ type:Number, required : true},
-                dlongitude:{ type:Number, required : true}
-                }
-            }
-        },
+                dlongitude:{ type:Number, required : true},
+    //            }
+     //       }
+    //    },
        
-    },
+    //},
     startTime:{
         type:Number,
         required:true,
