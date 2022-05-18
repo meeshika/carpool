@@ -117,11 +117,11 @@ exports.trips_create_trip = (req, res, next) => {
       var x = h*100+m;
       var date = (d.getFullYear())*10000+(d.getMonth()+1)*100+d.getDate();
       console.log(date);
-      if( nst >= net){
+      if((c==0)&& nst >= net){
              c = 2;
             // break;
       }
-      else if (td == date && x > nst){ c=3;}
+      else if ((c == 0)&& td == date && x > nst){ c=3;}
        if( c == 3){
         {return res.status(501).json({
           message: "Can not book ride in past!"}
