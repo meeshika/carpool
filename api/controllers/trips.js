@@ -135,14 +135,14 @@ exports.trips_create_trip = (req, res, next) => {
            carSeats:cs,
             //sourceLocation:{
              // coordinates:{
-                slatitude:parseFloat(req.body.sourceLocation.slatitude),
-                slongitude:parseFloat(req.body.sourceLocation.slongitude),
+                slatitude:parseFloat(req.body.slatitude),
+                slongitude:parseFloat(req.body.slongitude),
             //  }
             //},
            // destinationLocation:{
             //  coordinates:{
-                dlatitude:parseFloat(req.body.destinationLocation.dlatitude),
-                dlongitude:parseFloat(req.body.destinationLocation.dlongitude),
+                dlatitude:parseFloat(req.body.dlatitude),
+                dlongitude:parseFloat(req.body.dlongitude),
             //  }
            // },
             startTime:nst,
