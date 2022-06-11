@@ -5,7 +5,10 @@ const tripsController = require('../controllers/trips');
 
 router.get("/", tripsController.trips_get_all);
 
-router.post("/", tripsController.trips_create_trip);
+router.get("/:slat/:slong/:dlang/:dlong", tripsController.trip_get_trip);
+
+
+router.post("/",checkAuth, tripsController.trips_create_trip);
 
 router.get("/:tripId", function(){
   tripsController.trips_get_trip});

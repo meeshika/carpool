@@ -84,8 +84,8 @@ exports.trips_create_trip = (req, res, next) => {
   const neth = parseInt(req.body.endTimeh);
   
   const netm = parseInt(req.body.endTimem);
-  const nst = nsth* 100 + nstm;
-  const net = neth*100 + netm;
+  let nst = nsth* 100 + nstm;
+  let net = neth*100 + netm;
   const td = parseInt(req.body.tripDate);
   const cs = parseInt(req.body.carSeats);
   let a = -1;
@@ -96,6 +96,12 @@ exports.trips_create_trip = (req, res, next) => {
         message: "Not a valid user!"})
     }
   else{
+    var d = new Date(); // for now
+    var h = d.getHours(); 
+    var m = d.getMinutes();
+    var x = h*100+m;
+    var date = (d.getFullYear())*10000+(d.getMonth()+1)*100+d.getDate();
+    console.log(date);
   Trip2.find({ email: req.body.email , tripDate: td })
     .exec()
     .then(trip => {
@@ -103,33 +109,33 @@ exports.trips_create_trip = (req, res, next) => {
       // console.log(trip[0]);
       // console.log("hey there");
       var c = 0;
+      var f = 0;
       if (trip.length >= 1){
         for ( t in trip){
           if((nst < net)&&(!(t.startTime >= net || nst >= t.endTime))){
-             c = 1;
+             f = 1;
              break;
           }
         }
       }
-      var d = new Date(); // for now
-      var h = d.getHours(); 
-      var m = d.getMinutes();
-      var x = h*100+m;
-      var date = (d.getFullYear())*10000+(d.getMonth()+1)*100+d.getDate();
-      console.log(date);
-      if((c==0)&& nst >= net){
+      if(nst >= net){
              c = 2;
              console.log(c);
             // break;
       }
-      else if ((c == 0)&& td == date && x > nst){ c=3;console.log(c);}
+      else if ( td == date && x > nst){ c=3;console.log(c);}
       console.log(c);
-       if( c == 3){
+      if( c == 3 && f == 1){
         return res.status(501).json({
           message: "Can not book ride in past!"}
         );
       }
-      else if(c==1)
+      else  if( c == 3){
+        return res.status(501).json({
+          message: "Can not book ride in past!"}
+        );
+      }
+      else if(f==1)
         {return res.status(409).json({
           message: "you have already published a ride in this duration!"}
         );}
