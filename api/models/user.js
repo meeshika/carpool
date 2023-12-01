@@ -12,10 +12,23 @@ const userSchema = mongoose.Schema({
     password: { type: String,
       required:true
     },
-    licenseNo:{type:String,required:true},
+    vehicleRegistrationNo:{type:String,required:true},
     phoneNo:{ type:String,required:true},
     address:{type:String,required:true},
-    rating:{type:Number,required:false}
+    carMakeModel:{type:String,required:true},
+    emergencyEmail1:{ 
+      type: String, 
+   required: true, 
+      unique: true, 
+      match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+  },
+  emergencyEmail2:{ 
+    type: String, 
+ required: true, 
+    unique: true, 
+    match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+},
+
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -2,56 +2,39 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 //require("dotenv").config();
+
 const User = require("../models/user");
-
-// exports.user_signup = (req, res, next) => {
-//   const user = new User({
-//     _id:new mongoose.Types.ObjectId(),
-//     email :req.body.email,
-//     password:req.body.password
-//   });
-//   user.save().then(
-//     () => {
-//       res.status(201).json({message:"user created"});
-//     }
-//   ).catch(
-//     (err)=>{
-//       res.status(500).json({error:err});
-//       console.log(err);
-//     }
-//   )
-// }
-
-
-// exports.user_login = (req, res, next) => {
-//   User.find({ email: req.body.email })
-//     .exec()
-//     .then(user => {
-//       if (user.length < 1)
 
 exports.user_signup = (req, res, next) => {
   User.find({ email: req.body.email })
     .exec()
     .then(user => {
       if (user.length >= 1) {
+        console.log(user[0].email);
         return res.status(409).json({
-          message: "Mail exists"
+          message: "Mail exists",
+         // useremail: req.body.email
         });
       } else {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           if (err) {
             return res.status(500).json({
-              error: err
+              error: err,
+              mess : "hashing "
             });
-          } else {
+          }
+           else {
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
               name:req.body.name,
               email: req.body.email,
               password: hash,
-              licenseNo:req.body.licenseNo,
               phoneNo:req.body.phoneNo,
-              address:req.body.address
+              address:req.body.address,
+              vehicleRegistrationNo: req.body.vehicleRegistrationNo,
+              carMakeModel:req.body.carMakeModel,
+              emergencyEmail1: req.body. emergencyEmail1,
+              emergencyEmail2:req.body. emergencyEmail2
             });
             user
               .save()
@@ -64,7 +47,8 @@ exports.user_signup = (req, res, next) => {
               .catch(err => {
                 console.log(err);
                 res.status(500).json({
-                  error: err
+                  error: err,
+                  mess : " user creation"
                 });
               });
           }
@@ -98,9 +82,9 @@ exports.user_login = (req, res, next) => {
               email: user[0].email,
               userId: user[0]._id
             },
-            process.env.JWT_KEY,
+            "jwtkey",
             {
-              expiresIn: "1h"
+              expiresIn: "24h"
             }
           );
           console.log(req.body.email);
